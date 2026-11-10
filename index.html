@@ -1,0 +1,65 @@
+---
+layout: default
+title: 尚小夏
+---
+<header class="home-header">
+  <h1 class="site-title">尚小夏</h1>
+  <p class="tagline">大溪地的漏雨公寓。</p>
+  <p class="motto">想象其实是记忆的一种形式，而记忆也不过是一种想象。</p>
+</header>
+
+<div class="intro">
+  <p>这里是尚小夏的博客存档。文章从互联网档案馆（Wayback Machine）找回，正文照录，没有改写。</p>
+  <p>这一辑来自博客大巴 shangxxia.blogbus.com（<a href="https://web.archive.org/web/20190530085240/http://shangxxia.blogbus.com/">网站存档</a>），写于 2008 年 5 月至 2012 年 3 月。博客先后叫过「铅笔字描绘的黑白影像」（2008）和「大溪地的漏雨公寓。」（2011–2012）。</p>
+  <p>有些帖子原本带着照片。图片在存档里已经找不到了，只留下标题或图说，目录里标为「图片缺失」。</p>
+  {% if site.sina.size > 0 %}
+    <p>新浪博客找回的文章也列在下面。</p>
+  {% endif %}
+</div>
+
+{% assign source_keys = "blogbus,sina" | split: "," %}
+{% assign source_labels = "博客大巴,新浪博客" | split: "," %}
+{% for key in source_keys %}
+  {% assign posts = site[key] | sort: "date" | reverse %}
+  {% if posts.size > 0 %}
+    <section class="source-block" aria-label="{{ source_labels[forloop.index0] }}">
+      {% if site.sina.size > 0 %}
+        <p class="source-name">{{ source_labels[forloop.index0] }}</p>
+      {% endif %}
+      <p class="count">共 {{ posts.size }} 篇</p>
+      <nav class="year-nav" aria-label="{{ source_labels[forloop.index0] }}年份">
+        {%- assign seen = "," -%}
+        {%- for post in posts -%}
+          {%- assign y = post.year | append: "" -%}
+          {%- assign token = "," | append: y | append: "," -%}
+          {%- unless seen contains token -%}
+            <a href="#{{ key }}-{{ y }}">{{ y }}</a>
+            {%- assign seen = seen | append: y | append: "," -%}
+          {%- endunless -%}
+        {%- endfor -%}
+      </nav>
+      {% assign current_year = "" %}
+      {% for post in posts %}
+        {% assign y = post.year | append: "" %}
+        {% if y != current_year %}
+          {% if current_year != "" %}
+            </ul>
+          {% endif %}
+          <h2 class="year" id="{{ key }}-{{ y }}">{{ y }}</h2>
+          <ul class="post-list">
+          {% assign current_year = y %}
+        {% endif %}
+        <li>
+          <a href="{{ post.url | relative_url }}">
+            <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.list_date }}{% if post.list_time %} {{ post.list_time }}{% endif %}</time>
+            <span class="item-title">{{ post.title | escape }}</span>
+            {% if post.photos_missing %}<span class="badge">图片缺失</span>{% endif %}
+          </a>
+        </li>
+        {% if forloop.last %}
+          </ul>
+        {% endif %}
+      {% endfor %}
+    </section>
+  {% endif %}
+{% endfor %}

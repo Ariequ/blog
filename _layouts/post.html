@@ -1,0 +1,87 @@
+---
+layout: default
+---
+{% assign older = false %}
+{% assign newer = false %}
+{% assign family = site[page.collection] | sort: "date" %}
+{% for item in family %}
+  {% if item.url != page.url and item.date < page.date %}
+    {% assign older = item %}
+  {% endif %}
+{% endfor %}
+{% assign family_rev = site[page.collection] | sort: "date" | reverse %}
+{% for item in family_rev %}
+  {% if item.url != page.url and item.date > page.date %}
+    {% assign newer = item %}
+  {% endif %}
+{% endfor %}
+<article class="post{% if page.photos_missing %} missing-photos{% endif %}">
+  <header class="post-header">
+    <p class="post-kicker">
+      <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date_text }}</time>
+      {% if page.category_label %}
+        <span class="sep" aria-hidden="true">·</span>
+        <span>{{ page.category_label }}</span>
+      {% endif %}
+      {% if page.source_label %}
+        <span class="sep" aria-hidden="true">·</span>
+        <span>{{ page.source_label }}</span>
+      {% endif %}
+      {% if page.photos_missing %}
+        <span class="sep" aria-hidden="true">·</span>
+        <span class="badge">图片缺失</span>
+      {% endif %}
+    </p>
+    <h1 class="post-title">{{ page.title | escape }}</h1>
+  </header>
+  {% if page.photos_missing %}
+    <p class="photo-note">原帖中的图片已经丢失。</p>
+  {% endif %}
+  <div class="post-body">
+    {{ content }}
+  </div>
+  <footer class="post-sources">
+    <dl>
+      <div>
+        <dt>日期</dt>
+        <dd><time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date_text }}</time></dd>
+      </div>
+      {% if page.original_url %}
+        <div>
+          <dt>原文</dt>
+          <dd><a href="{{ page.original_url }}">{{ page.original_url }}</a></dd>
+        </div>
+      {% endif %}
+      {% if page.archive_url %}
+        <div>
+          <dt>存档</dt>
+          <dd><a href="{{ page.archive_url }}">{{ page.archive_url }}</a></dd>
+        </div>
+      {% endif %}
+      {% if page.rss_archive_url %}
+        <div>
+          <dt>RSS 存档</dt>
+          <dd><a href="{{ page.rss_archive_url }}">{{ page.rss_archive_url }}</a></dd>
+        </div>
+      {% endif %}
+    </dl>
+  </footer>
+  <nav class="pager" aria-label="相邻文章">
+    {% if newer %}
+      <a class="newer" href="{{ newer.url | relative_url }}">
+        <span class="pager-label">较新</span>
+        <span class="pager-title">{{ newer.title | escape }}</span>
+      </a>
+    {% else %}
+      <span></span>
+    {% endif %}
+    {% if older %}
+      <a class="older" href="{{ older.url | relative_url }}">
+        <span class="pager-label">较旧</span>
+        <span class="pager-title">{{ older.title | escape }}</span>
+      </a>
+    {% else %}
+      <span></span>
+    {% endif %}
+  </nav>
+</article>

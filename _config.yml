@@ -1,0 +1,49 @@
+title: 尚小夏
+description: 尚小夏的博客大巴存档，自 Wayback Machine 找回。
+url: "https://ariequ.github.io"
+baseurl: "/blog"
+theme: null
+lang: zh-CN
+timezone: Asia/Shanghai
+
+markdown: kramdown
+highlighter: rouge
+kramdown:
+  input: GFM
+  hard_wrap: false
+  parse_block_html: false
+  parse_span_html: false
+  smart_quotes: ["apos", "apos", "quot", "quot"]
+  entity_output: as_char
+  typographic_symbols:
+    hellip: "..."
+    mdash: "---"
+    ndash: "--"
+    laquo: "<<"
+    raquo: ">>"
+
+collections:
+  blogbus:
+    output: true
+  sina:
+    output: true
+
+defaults:
+  - scope:
+      path: ""
+      type: blogbus
+    values:
+      layout: post
+  - scope:
+      path: ""
+      type: sina
+    values:
+      layout: post
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - .bundle
+  - README.md
+  - tools
