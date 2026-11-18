@@ -16,7 +16,7 @@
   function readInitial() {
     var q = new URLSearchParams(location.search);
     var source = q.get("source");
-    if (source !== "blog" && source !== "fanfou") source = "all";
+    if (source !== "新浪博客" && source !== "博客大巴" && source !== "饭否") source = "all";
     var year = q.get("year") || "";
     if (year && !/^\d{4}$/.test(year)) year = "";
     var hash = /^#y(\d{4})$/.exec(location.hash || "");
@@ -26,8 +26,7 @@
 
   function filtered() {
     return items.filter(function (item) {
-      if (state.source === "blog" && item.kind !== "blog") return false;
-      if (state.source === "fanfou" && item.kind !== "fanfou") return false;
+      if (state.source !== "all" && item.src !== state.source) return false;
       if (state.year && String(item.y) !== String(state.year)) return false;
       return true;
     });
@@ -105,14 +104,11 @@
   }
 
   function sourceLabel() {
-    if (state.source === "blog") return "博客";
-    if (state.source === "fanfou") return "饭否";
-    return "全部";
+    return state.source === "all" ? "全部" : state.source;
   }
 
   function emptyCopy() {
-    if (state.year && state.source === "fanfou") return "这一年没有饭否。";
-    if (state.year && state.source === "blog") return "这一年没有博客。";
+    if (state.year && state.source !== "all") return "这一年没有" + state.source + "。";
     if (state.year) return "这一年没有条目。";
     return "没有符合的条目。";
   }
@@ -187,35 +183,59 @@
     state.shown = BATCH;
     render();
     assert("default 30", stream.querySelectorAll(".card").length === 30);
+    assert("four filters", document.querySelectorAll(".filter-row [data-source]").length === 4);
+    assert("no overflow", document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1);
     moreBtn.click();
     assert("more 60", stream.querySelectorAll(".card").length === 60);
-    document.querySelector('[data-source="fanfou"]').click();
+    assert("counts", items.filter(function (i) { return i.src === "新浪博客"; }).length === 319 && items.filter(function (i) { return i.src === "博客大巴"; }).length === 38 && items.filter(function (i) { return i.src === "饭否"; }).length === 574 && items.length === 931);
+    document.querySelector('[data-source="饭否"]').click();
     assert("fanfou only", Array.prototype.every.call(stream.querySelectorAll(".card"), function (c) {
-      return c.getAttribute("data-kind") === "fanfou";
-    }));
+      return c.getAttribute("data-src") === "饭否";
+    }) && stream.querySelectorAll(".card").length === 30);
     assert("fanfou total", statusEl.textContent.indexOf("共 574 条") !== -1);
-    document.querySelector('[data-source="blog"]').click();
-    assert("blog only", Array.prototype.every.call(stream.querySelectorAll(".card"), function (c) {
-      return c.getAttribute("data-kind") === "blog";
-    }));
-    assert("blog total", statusEl.textContent.indexOf("共 357 条") !== -1);
+    document.querySelector('[data-source="新浪博客"]').click();
+    assert("sina only", Array.prototype.every.call(stream.querySelectorAll(".card"), function (c) {
+      return c.getAttribute("data-src") === "新浪博客";
+    }) && stream.querySelectorAll(".card").length === 30);
+    assert("sina total", statusEl.textContent.indexOf("共 319 条") !== -1 && statusEl.textContent.indexOf("已显示 30") !== -1);
+    assert("sina pressed", document.querySelector('[data-source="新浪博客"]').getAttribute("aria-pressed") === "true" && document.querySelector('[data-source="all"]').getAttribute("aria-pressed") === "false");
+    document.querySelector('[data-source="博客大巴"]').click();
+    assert("blogbus only", Array.prototype.every.call(stream.querySelectorAll(".card"), function (c) {
+      return c.getAttribute("data-src") === "博客大巴";
+    }) && stream.querySelectorAll(".card").length === 30);
+    assert("blogbus total", statusEl.textContent.indexOf("共 38 条") !== -1);
+    moreBtn.click();
+    assert("blogbus rest", stream.querySelectorAll(".card").length === 38 && moreBtn.hidden === true);
     document.querySelector('[data-year="2011"]').click();
-    assert("2011 blog year", Array.prototype.every.call(stream.querySelectorAll(".card"), function (c) {
-      return c.getAttribute("data-year") === "2011" && c.getAttribute("data-kind") === "blog";
+    assert("2011 blogbus", stream.querySelectorAll(".card").length > 0 && Array.prototype.every.call(stream.querySelectorAll(".card"), function (c) {
+      return c.getAttribute("data-year") === "2011" && c.getAttribute("data-src") === "博客大巴";
     }));
-    document.querySelector('[data-source="fanfou"]').click();
-    assert("2011 fanfou", Array.prototype.every.call(stream.querySelectorAll(".card"), function (c) {
-      return c.getAttribute("data-year") === "2011" && c.getAttribute("data-kind") === "fanfou";
+    document.querySelector('[data-source="新浪博客"]').click();
+    assert("2011 sina empty", stream.querySelector(".card") === null && emptyEl.hidden === false);
+    document.querySelector('[data-year="2008"]').click();
+    assert("2008 sina", stream.querySelectorAll(".card").length === 30 && Array.prototype.every.call(stream.querySelectorAll(".card"), function (c) {
+      return c.getAttribute("data-year") === "2008" && c.getAttribute("data-src") === "新浪博客";
+    }));
+    document.querySelector('[data-year="2011"]').click();
+    document.querySelector('[data-source="饭否"]').click();
+    assert("2011 fanfou", stream.querySelectorAll(".card").length === 30 && Array.prototype.every.call(stream.querySelectorAll(".card"), function (c) {
+      return c.getAttribute("data-year") === "2011" && c.getAttribute("data-src") === "饭否";
     }));
     var img = stream.querySelector("img.card-photo");
     assert("2011 photo", !!(img && img.getAttribute("src").indexOf("/assets/fanfou/") !== -1 && img.getAttribute("loading") === "lazy"));
     document.querySelector('[data-year="2006"]').click();
     assert("2006 fanfou empty", stream.querySelector(".card") === null && emptyEl.hidden === false);
+    document.querySelector('[data-source="博客大巴"]').click();
+    assert("2006 blogbus empty", stream.querySelector(".card") === null && emptyEl.hidden === false);
+    document.querySelector('[data-source="新浪博客"]').click();
+    assert("2006 sina", stream.querySelectorAll(".card").length === 30 && statusEl.textContent.indexOf("已显示 30") !== -1);
     document.querySelector('[data-year="2026"]').click();
     document.querySelector('[data-source="all"]').click();
     assert("2026 one", stream.querySelectorAll(".card").length === 1 && stream.querySelector(".card").getAttribute("data-year") === "2026");
-    document.querySelector('[data-source="blog"]').click();
-    assert("2026 blog empty", stream.querySelector(".card") === null);
+    document.querySelector('[data-source="新浪博客"]').click();
+    assert("2026 sina empty", stream.querySelector(".card") === null);
+    document.querySelector('[data-source="博客大巴"]').click();
+    assert("2026 blogbus empty", stream.querySelector(".card") === null);
     document.querySelector('[data-source="all"]').click();
     document.querySelector('[data-year=""]').click();
     assert("reset 30", stream.querySelectorAll(".card").length === 30 && statusEl.textContent.indexOf("共 931 条") !== -1);
