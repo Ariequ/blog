@@ -544,24 +544,6 @@ a:focus-visible {
   text-align: center;
 }
 
-.load-more {
-  display: block;
-  width: 100%;
-  margin: 1.15rem 0 0.4rem;
-  padding: 0.8rem 1rem;
-  font: inherit;
-  font-family: var(--sans);
-  font-size: 1rem;
-  color: var(--ink);
-  background: transparent;
-  border: 1px solid var(--rule);
-  border-radius: 2px;
-  cursor: pointer;
-}
-
-.load-more:hover,
-.load-more:focus-visible { color: var(--accent); border-color: var(--accent); }
-
 .empty {
   margin: 1rem 0;
   color: var(--muted);
