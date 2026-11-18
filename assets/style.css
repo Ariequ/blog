@@ -437,6 +437,122 @@ a:focus-visible {
   white-space: nowrap;
 }
 
+.reader-controls {
+  margin: 1.15rem 0 0.4rem;
+}
+
+.filter-row,
+.reader-controls .year-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.15rem 0.15rem;
+  margin: 0.15rem 0;
+}
+
+.text-btn {
+  font: inherit;
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: var(--accent);
+  background: transparent;
+  border: 0;
+  padding: 0.45rem 0.55rem;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+}
+
+.text-btn[aria-pressed="true"] {
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.card {
+  padding: 1.15rem 0 1.2rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.card-kicker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.6rem;
+  margin: 0;
+  color: var(--muted);
+  font-family: var(--sans);
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+.card-kicker .badge { margin-left: 0; }
+
+.card-title {
+  margin: 0.35rem 0 0;
+  font-size: 1.28rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.card-title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.card-title a:hover,
+.card-title a:focus-visible { color: var(--accent); }
+
+.card-text,
+.excerpt {
+  margin: 0.45rem 0 0;
+  overflow-wrap: anywhere;
+}
+
+.card-text { white-space: pre-wrap; }
+
+.card-photo {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  margin: 0.8rem 0 0;
+}
+
+.card-actions {
+  margin: 0.65rem 0 0;
+  font-family: var(--sans);
+  font-size: 0.9rem;
+}
+
+.card-actions a { text-underline-offset: 0.15em; }
+
+.load-more {
+  display: block;
+  width: 100%;
+  margin: 1.15rem 0 0.4rem;
+  padding: 0.8rem 1rem;
+  font: inherit;
+  font-family: var(--sans);
+  font-size: 1rem;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.load-more:hover,
+.load-more:focus-visible { color: var(--accent); border-color: var(--accent); }
+
+.empty {
+  margin: 1rem 0;
+  color: var(--muted);
+}
+
+.noscript-archive { margin-top: 1.4rem; }
+.noscript-archive ul { padding-left: 1.2rem; }
+
 @media (max-width: 40rem) {
   .tl-row {
     grid-template-columns: 1fr;
