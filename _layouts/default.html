@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
   <meta name="format-detection" content="telephone=no">
-  <title>{% if page.url == "/" %}尚小夏 · 大溪地的漏雨公寓。{% else %}{{ page.title | escape }} · {{ page.date_text }} · 尚小夏{% endif %}</title>
-  <meta name="description" content="{% if page.url == "/" %}尚小夏写在博客大巴上的文章，从 Wayback Machine 找回，原文照录。{% else %}{{ page.title | escape }}。尚小夏，{{ page.date_text }}。{% endif %}">
+  <title>{% if page.url == "/" %}尚小夏 · 大溪地的漏雨公寓。{% else %}{{ page.title | escape }}{% if page.date_text %} · {{ page.date_text }}{% endif %} · 尚小夏{% endif %}</title>
+  <meta name="description" content="{% if page.description %}{{ page.description | escape }}{% elsif page.url == "/" %}尚小夏写在博客大巴上的文章，从 Wayback Machine 找回，原文照录。{% elsif page.date_text %}{{ page.title | escape }}。尚小夏，{{ page.date_text }}。{% else %}{{ page.title | escape }}{% endif %}">
   {% if page.noindex %}<meta name="robots" content="noindex">{% endif %}
   <link rel="canonical" href="{{ page.url | absolute_url }}">
   <meta property="og:locale" content="zh_CN">
@@ -31,7 +31,7 @@
       {{ content }}
     </main>
     <footer class="site-footer">
-      <p><a href="{{ '/' | relative_url }}">尚小夏</a> · 自 Wayback Machine 找回的博客存档</p>
+      <p><a href="{{ '/' | relative_url }}">尚小夏</a> · 博客与饭否存档</p>
     </footer>
   </div>
 </body>
