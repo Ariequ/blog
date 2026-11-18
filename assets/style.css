@@ -530,6 +530,20 @@ a:focus-visible {
 
 .card-actions a { text-underline-offset: 0.15em; }
 
+.reader-sentinel {
+  height: 1px;
+  margin: 0;
+  pointer-events: none;
+}
+
+.end-note {
+  margin: 1rem 0 0;
+  color: var(--muted);
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
 .load-more {
   display: block;
   width: 100%;
