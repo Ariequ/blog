@@ -570,6 +570,46 @@ a:focus-visible {
 .noscript-archive { margin-top: 1.4rem; }
 .noscript-archive ul { padding-left: 1.2rem; }
 
+.letters-entry {
+  margin: 1rem 0 0;
+  font-family: var(--sans);
+  font-size: 0.95rem;
+}
+
+.letter-page .letter-meta,
+.letter-page .letter-draft,
+.letter-page .letter-private,
+.letter-page .letter-aside {
+  font-family: var(--sans);
+  font-size: 0.92rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.letter-section {
+  margin: 2rem 0 0;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--rule);
+}
+
+.letter-section h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.letter-body p {
+  margin: 0 0 1.05em;
+  overflow-wrap: anywhere;
+}
+
+.uncertain {
+  background: var(--note-bg);
+  color: var(--note-ink);
+  padding: 0 0.15em;
+}
+
 @media (max-width: 40rem) {
   .tl-row {
     grid-template-columns: 1fr;
