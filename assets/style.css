@@ -604,6 +604,42 @@ a:focus-visible {
   overflow-wrap: anywhere;
 }
 
+.letter-figure {
+  margin: 0.85rem 0 1.15rem;
+  max-width: 100%;
+}
+
+.letter-figure a {
+  display: block;
+  max-width: 100%;
+}
+
+.letter-figure img {
+  display: block;
+  width: min(100%, 26rem);
+  max-width: 100%;
+  height: auto;
+  background: var(--rule);
+}
+
+.letter-figure.is-wide img {
+  width: 100%;
+}
+
+.letter-figure figcaption {
+  margin: 0.4rem 0 0;
+  max-width: 100%;
+  color: var(--muted);
+  font-family: var(--sans);
+  font-size: 0.86rem;
+  line-height: 1.65;
+}
+
+.letter-page code {
+  overflow-wrap: anywhere;
+  font-size: 0.92em;
+}
+
 .uncertain {
   background: var(--note-bg);
   color: var(--note-ink);
