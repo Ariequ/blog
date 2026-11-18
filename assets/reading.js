@@ -3,9 +3,7 @@
   var stream = document.getElementById("stream");
   var statusEl = document.getElementById("reader-status");
   var emptyEl = document.getElementById("reader-empty");
-  var moreBtn = document.getElementById("reader-more");
   var endEl = document.getElementById("reader-end");
-  var hintEl = document.getElementById("reader-hint");
   var sentinel = document.getElementById("reader-sentinel");
   var reader = document.getElementById("reader");
   if (!dataEl || !stream || !reader) return;
@@ -148,12 +146,6 @@
     emptyEl.hidden = list.length !== 0;
     emptyEl.textContent = emptyCopy();
     if (endEl) endEl.hidden = !done;
-    if (hintEl) hintEl.hidden = !(autoload && list.length > shown);
-    if (shown < list.length) {
-      var step = Math.min(BATCH, list.length - shown);
-      moreBtn.textContent = "再看 " + step + " 条";
-    }
-    moreBtn.hidden = autoload || shown >= list.length;
     document.querySelectorAll("[data-source]").forEach(function (btn) {
       btn.setAttribute("aria-pressed", btn.getAttribute("data-source") === state.source ? "true" : "false");
     });
@@ -194,8 +186,6 @@
     io.observe(sentinel);
   }
 
-  moreBtn.addEventListener("click", loadMore);
-
   function nearSentinel() {
     if (!sentinel) return false;
     return sentinel.getBoundingClientRect().top <= window.innerHeight + 320;
@@ -230,12 +220,8 @@
       }, { root: null, rootMargin: "320px 0px", threshold: 0 });
       io.observe(sentinel);
       autoload = true;
-      moreBtn.hidden = true;
-      moreBtn.setAttribute("tabindex", "-1");
     } catch (err) {
       autoload = false;
-      moreBtn.hidden = false;
-      moreBtn.removeAttribute("tabindex");
     }
   }
 
@@ -279,11 +265,17 @@
     assert("default 30", stream.querySelectorAll(".card").length === 30);
     assert("four filters", document.querySelectorAll(".filter-row [data-source]").length === 4);
     assert("no overflow", document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1);
-    assert("button not primary", autoload && moreBtn.hidden === true);
-    moreBtn.click();
-    assert("more 60", stream.querySelectorAll(".card").length === 60);
-    moreBtn.click();
-    assert("more 90", stream.querySelectorAll(".card").length === 90);
+    function manualButton() {
+      if (document.getElementById("reader-more") || document.querySelector(".load-more")) return true;
+      return Array.prototype.some.call(document.querySelectorAll("button"), function (btn) {
+        return btn.textContent.indexOf("再看") !== -1;
+      });
+    }
+    assert("no manual button", !manualButton());
+    loadMore();
+    assert("more 60", stream.querySelectorAll(".card").length === 60 && !manualButton());
+    loadMore();
+    assert("more 90", stream.querySelectorAll(".card").length === 90 && !manualButton());
     var seen = {};
     var dup = 0;
     Array.prototype.forEach.call(stream.querySelectorAll(".card"), function (card) {
@@ -310,16 +302,16 @@
       return c.getAttribute("data-src") === "博客大巴";
     }) && stream.querySelectorAll(".card").length === 30);
     assert("blogbus total", statusEl.textContent.indexOf("共 38 条") !== -1);
-    moreBtn.click();
-    assert("blogbus rest", stream.querySelectorAll(".card").length === 38 && endEl.hidden === false);
-    moreBtn.click();
-    assert("blogbus stop", stream.querySelectorAll(".card").length === 38);
+    loadMore();
+    assert("blogbus rest", stream.querySelectorAll(".card").length === 38 && endEl.hidden === false && !manualButton() && statusEl.textContent.indexOf("已全部显示") !== -1);
+    loadMore();
+    assert("blogbus stop", stream.querySelectorAll(".card").length === 38 && !manualButton());
     document.querySelector('[data-year="2011"]').click();
     assert("2011 blogbus", stream.querySelectorAll(".card").length > 0 && Array.prototype.every.call(stream.querySelectorAll(".card"), function (c) {
       return c.getAttribute("data-year") === "2011" && c.getAttribute("data-src") === "博客大巴";
     }));
     document.querySelector('[data-source="新浪博客"]').click();
-    assert("2011 sina empty", stream.querySelector(".card") === null && emptyEl.hidden === false);
+    assert("2011 sina empty", stream.querySelector(".card") === null && emptyEl.hidden === false && endEl.hidden === true && !manualButton());
     document.querySelector('[data-year="2008"]').click();
     assert("2008 sina", stream.querySelectorAll(".card").length === 30 && Array.prototype.every.call(stream.querySelectorAll(".card"), function (c) {
       return c.getAttribute("data-year") === "2008" && c.getAttribute("data-src") === "新浪博客";
@@ -340,8 +332,8 @@
     document.querySelector('[data-year="2026"]').click();
     document.querySelector('[data-source="all"]').click();
     assert("2026 one", stream.querySelectorAll(".card").length === 1 && endEl.hidden === false);
-    moreBtn.click();
-    assert("2026 stop", stream.querySelectorAll(".card").length === 1);
+    loadMore();
+    assert("2026 stop", stream.querySelectorAll(".card").length === 1 && endEl.hidden === false && !manualButton());
     document.querySelector('[data-source="新浪博客"]').click();
     assert("2026 sina empty", stream.querySelector(".card") === null);
     document.querySelector('[data-source="博客大巴"]').click();
@@ -385,6 +377,7 @@
           });
           log.push("dups " + dup);
           log.push("months " + stream.querySelectorAll("h3.month").length);
+          log.push("button " + (document.getElementById("reader-more") || document.querySelector(".load-more") ? "yes" : "no"));
           finish();
         }, 300);
       }, 300);
