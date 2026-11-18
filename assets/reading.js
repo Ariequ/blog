@@ -4,7 +4,6 @@
   var statusEl = document.getElementById("reader-status");
   var emptyEl = document.getElementById("reader-empty");
   var endEl = document.getElementById("reader-end");
-  var hintEl = document.getElementById("reader-hint");
   var sentinel = document.getElementById("reader-sentinel");
   var reader = document.getElementById("reader");
   if (!dataEl || !stream || !reader) return;
@@ -147,7 +146,6 @@
     emptyEl.hidden = list.length !== 0;
     emptyEl.textContent = emptyCopy();
     if (endEl) endEl.hidden = !done;
-    if (hintEl) hintEl.hidden = !(autoload && list.length > shown);
     document.querySelectorAll("[data-source]").forEach(function (btn) {
       btn.setAttribute("aria-pressed", btn.getAttribute("data-source") === state.source ? "true" : "false");
     });
