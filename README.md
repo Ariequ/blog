@@ -2,7 +2,7 @@
 
 尚小夏的博客存档，发布在 <https://ariequ.github.io/blog/>。
 
-文章从 Internet Archive 的 Wayback Machine 找回，正文照录。收录博客大巴 shangxxia.blogbus.com（2008 年 5 月至 2012 年 3 月）和新浪博客（2006 年至 2010 年）。另有饭否消息 574 条（2008–2013，以及 2026-11-18），在 `/fanfou/` 按年月浏览。站点用 GitHub Pages 自带的 Jekyll 生成，基路径是 `/blog/`。
+文章从 Internet Archive 的 Wayback Machine 找回，正文照录。收录博客大巴 shangxxia.blogbus.com（2008 年 5 月至 2012 年 3 月）和新浪博客（2006 年至 2010 年）。另有饭否消息 574 条（2008–2013，以及 2026-11-18）。首页把这三处按时间从新到旧排在一起；饭否仍可在 `/fanfou/` 按年月浏览。站点用 GitHub Pages 自带的 Jekyll 生成，基路径是 `/blog/`。
 
 ## 目录
 
@@ -10,7 +10,7 @@
 - `_sina/`：新浪博客的文章。再放进带同样头信息的 Markdown，首页会按来源和年份列出来
 - `fanfou/`：饭否消息，按年月分页
 - `assets/fanfou/`：饭否照片（596 像素宽的页面展示图）和可下载的 JSON、CSV
-- `index.html`：目录
+- `index.html`：统一时间线
 - `_layouts/`：版式
 - `assets/style.css`：样式
 
