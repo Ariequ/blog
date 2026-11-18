@@ -447,6 +447,7 @@ a:focus-visible {
   flex-wrap: wrap;
   gap: 0.15rem 0.15rem;
   margin: 0.15rem 0;
+  max-width: 100%;
 }
 
 .text-btn {
@@ -461,6 +462,8 @@ a:focus-visible {
   cursor: pointer;
   text-decoration: underline;
   text-underline-offset: 0.16em;
+  white-space: nowrap;
+  max-width: 100%;
 }
 
 .text-btn[aria-pressed="true"] {

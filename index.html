@@ -10,14 +10,15 @@ description: "尚小夏的博客与饭否，按时间阅读。饭否是全文，
 </header>
 <div class="intro">
 <p>顺着时间往回读。饭否留下全文和照片；博客先给一段摘要，想看再打开。</p>
-<p>「博客」把博客大巴和新浪博客放在一起，卡片上仍写明是哪一处。时间按原来页面上的日期，没有再加时差。没有脚本时，先显示最近 30 条；饭否也可以<a href="{{ '/fanfou/' | relative_url }}">按月读完全文</a>。</p>
+<p>可以只看新浪博客、博客大巴或饭否。时间按原来页面上的日期，没有再加时差。没有脚本时，先显示最近 30 条；饭否也可以<a href="{{ '/fanfou/' | relative_url }}">按月读完全文</a>。</p>
 </div>
 <div id="reader" data-base="{{ site.baseurl }}">
 <div class="reader-controls">
 <div class="filter-row" role="group" aria-label="来源">
 <button type="button" class="text-btn" data-source="all" aria-pressed="true">全部</button>
-<button type="button" class="text-btn" data-source="blog" aria-pressed="false">博客</button>
-<button type="button" class="text-btn" data-source="fanfou" aria-pressed="false">饭否</button>
+<button type="button" class="text-btn" data-source="新浪博客" aria-pressed="false">新浪博客</button>
+<button type="button" class="text-btn" data-source="博客大巴" aria-pressed="false">博客大巴</button>
+<button type="button" class="text-btn" data-source="饭否" aria-pressed="false">饭否</button>
 </div>
 <div class="year-nav" role="group" aria-label="年份">
 <button type="button" class="text-btn" data-year="" aria-pressed="true">全部年份</button>
